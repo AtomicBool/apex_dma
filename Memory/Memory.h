@@ -144,13 +144,13 @@ public:
 	T Read(uint64_t address, int pid);
 
 	template<typename T>
-	T ReadArray(uint64_t address, T out[], size_t len);
+	void ReadArray(uint64_t address, T out[], size_t len);
 
 	template<typename T>
-	void Write(uint64_t address, const T& value);
+	void Write(uint64_t address, T value);
 
 	template<typename T>
-	void WriteArray(uint64_t address, const T value[], size_t len);
+	void WriteArray(uint64_t address, T value[], size_t len);
 
 	/**
 	 * \brief Create a scatter handle, this is used for scatter read/write requests
@@ -212,25 +212,24 @@ inline T Memory::Read(uint64_t address, int pid)
 }
 
 template<typename T>
-inline T Memory::ReadArray(uint64_t address, T out[], size_t len)
+inline void Memory::ReadArray(uint64_t address, T out[], size_t len)
 {
-	if(scatter_handle) AddScatterReadRequest(scatter_handle, address, &out, sizeof(T) * len);
+	if(scatter_handle) AddScatterReadRequest(scatter_handle, address, (T*)out, sizeof(T) * len);
 	ExecuteReadScatter(scatter_handle);
-	return out;
 }
 
 template<typename T>
-inline void Memory::Write(uint64_t address, const T& value)
+inline void Memory::Write(uint64_t address, T value)
 {
-	if(scatter_handle) AddScatterWriteRequest(scatter_handle, address, value, sizeof(T));
+	if(scatter_handle) AddScatterWriteRequest(scatter_handle, address, &value, sizeof(T));
 	ExecuteWriteScatter(scatter_handle);
 }
 
 template<typename T>
-inline void Memory::WriteArray(uint64_t address, const T value[], size_t len)
+inline void Memory::WriteArray(uint64_t address, T value[], size_t len)
 {
-	if(scatter_handle) AddScatterReadRequest(scatter_handle, address, &value, sizeof(T) * len);
-	ExecuteReadScatter(scatter_handle);
+	if(scatter_handle) AddScatterReadRequest(scatter_handle, address, (T*)value, sizeof(T) * len);
+	ExecuteWriteScatter(scatter_handle);
 }
 
 inline Memory mem;
