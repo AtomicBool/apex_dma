@@ -1,9 +1,9 @@
 
 # APEX DMA
 It's a DMA cheat framework for apex legends in VM.\
-Based on Memprocfs and Memflow.\
+Based on Memprocfs, MicroVMI plugin( for leechcore ), and Memflow QEMU Connector.\
 There's a simple example showing how to get key state and\
-the health of LocalPlayer in this project.
+the health of LocalPlayer in this repo.\
 
 ## Tested Features
 
@@ -26,6 +26,7 @@ the health of LocalPlayer in this project.
   sudo ./apex_dma
 ```
 
+Clean:
 ```bash
   sudo make clean
 ```
@@ -33,10 +34,11 @@ the health of LocalPlayer in this project.
 ## TODO
 
 - Add other features when I have free time
+
 - Windows with version <22000 will not be supported ( keyboard )\
   because the Registry is not working well\
   but modify winver in Memory/InputManager.cpp might work
-
+  ( I don't have enough space for another VM so I can't test it)
 
 ## Credits
 
