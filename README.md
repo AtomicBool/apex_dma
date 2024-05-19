@@ -11,6 +11,7 @@ the health of LocalPlayer in this repo.\
 - CR3(DTB) Fix
 - Basic Memory Functions:
 > - Scatter Read (Tested)
+> - Array Read (Tested)
 > - Get Base Module Address / Size (Tested)
 > - Scatter Write
 > - Sig Scanning
@@ -33,7 +34,7 @@ Clean:
 
 ## TODO
 
-- Add other features when I have free time
+- Test other features when I have time
 
 - Windows with version <22000 will not be supported ( keyboard )\
   because the Registry is not working well\
