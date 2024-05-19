@@ -1,13 +1,20 @@
 
 # APEX DMA
-It's a DMA cheat for apex legends in VM.\
-Based on Memprocfs and Memflow.
+It's a DMA cheat framework for apex legends in VM.\
+Based on Memprocfs and Memflow.\
+There's a simple example showing how to get key state and\
+the health of LocalPlayer in this project.
 
-## Features
+## Tested Features
 
 - Keyboard (windows version > 22000)
-- CR3(DTB) Fix (Seems working)
-- Memory R/W (Seems working)
+- CR3(DTB) Fix
+- Basic Memory Functions:
+> - Scatter Read (Tested)
+> - Get Base Module Address / Size (Tested)
+> - Scatter Write
+> - Sig Scanning
+> - Dumping MemMap
 
 
 ## Use
@@ -23,15 +30,11 @@ Based on Memprocfs and Memflow.
   sudo make clean
 ```
 
-
 ## TODO
 
-- Test Memory R/W and CR3 Fix with a simple demo
-- A guest with UDP communication
-- ESP
-- Aimbot
-- Other Stuff
-- Windows with version <22000 will not be supported ( keyboard )
+- Add other features when I have free time
+- Windows with version <22000 will not be supported ( keyboard )\
+  because the Registry is not working well
 
 
 ## Credits

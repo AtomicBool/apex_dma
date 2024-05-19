@@ -31,6 +31,7 @@ private:
 	/*this->registry_ptr = std::make_shared<c_registry>(*this);
 	this->key_ptr = std::make_shared<c_keys>(*this);*/
 
+	VMMDLL_SCATTER_HANDLE scatter_handle;
 public:
 	/**
 	 * brief Constructor takes a wide string of the process.
@@ -136,98 +137,20 @@ public:
 	 */
 	uint64_t FindSignature(const char* signature, uint64_t range_start, uint64_t range_end, int PID = 0);
 
-	/**
-	 * \brief Writes memory to the process 
-	 * \param address The address to write to
-	 * \param buffer The buffer to write
-	 * \param size The size of the buffer
-	 * \return 
-	 */
-	bool Write(uintptr_t address, void* buffer, size_t size) const;
-	bool Write(uintptr_t address, void* buffer, size_t size, int pid) const;
+	template<typename T>
+	T Read(uint64_t address);
 
-	/**
-	 * \brief Writes memory to the process using a template
-	 * \param address to write to
-	 * \param value the value you'll write to the address
-	 */
-	template <typename T>
-	void Write(void* address, T value)
-	{
-		Write(address, &value, sizeof(T));
-	}
+	template<typename T>
+	T Read(uint64_t address, int pid);
 
-	template <typename T>
-	void Write(uintptr_t address, T value)
-	{
-		Write(address, &value, sizeof(T));
-	}
+	template<typename T>
+	T ReadArray(uint64_t address, T out[], size_t len);
 
-	/**
-	* brief Reads memory from the process
-	* @param address The address to read from
-	* @param buffer The buffer to read to
-	* @param size The size of the buffer
-	* @return true if successful, false if not.
-	*/
-	bool Read(uintptr_t address, void* buffer, size_t size) const;
-	bool Read(uintptr_t address, void* buffer, size_t size, int pid) const;
+	template<typename T>
+	void Write(uint64_t address, const T& value);
 
-	/**
-	* brief Reads memory from the process using a template
-	* @param address The address to read from
-	* @return the value read from the process
-	*/
-	template <typename T>
-	T Read(void* address)
-	{
-		T buffer { };
-		memset(&buffer, 0, sizeof(T));
-		Read(reinterpret_cast<uint64_t>(address), reinterpret_cast<void*>(&buffer), sizeof(T));
-
-		return buffer;
-	}
-
-	template <typename T>
-	T Read(uint64_t address)
-	{
-		return Read<T>(reinterpret_cast<void*>(address));
-	}
-
-	/**
-	* brief Reads memory from the process using a template and pid
-	* @param address The address to read from
-	* @param pid The process id of the process
-	* @return the value read from the process
-	*/
-	template <typename T>
-	T Read(void* address, int pid)
-	{
-		T buffer { };
-		memset(&buffer, 0, sizeof(T));
-		Read(reinterpret_cast<uint64_t>(address), reinterpret_cast<void*>(&buffer), sizeof(T), pid);
-
-		return buffer;
-	}
-
-	template <typename T>
-	T Read(uint64_t address, int pid)
-	{
-		return Read<T>(reinterpret_cast<void*>(address), pid);
-	}
-
-	/**
-	* brief Reads a chain of offsets from the address
-	* @param address The address to read from
-	* @param a vector of offset values to read through
-	* @return the value read from the chain
-	*/
-	uint64_t ReadChain(uint64_t base, const std::vector<uint64_t>& offsets)
-	{
-		uint64_t result = Read<uint64_t>(base + offsets.at(0));
-		for (int i = 1; i < offsets.size(); i++) result = Read<uint64_t>(result + offsets.at(i));
-		return result;
-	}
+	template<typename T>
+	void WriteArray(uint64_t address, const T value[], size_t len);
 
 	/**
 	 * \brief Create a scatter handle, this is used for scatter read/write requests
@@ -261,8 +184,53 @@ public:
 	void ExecuteReadScatter(VMMDLL_SCATTER_HANDLE handle, int pid = 0);
 	void ExecuteWriteScatter(VMMDLL_SCATTER_HANDLE handle, int pid = 0);
 
+	uint64_t get_base_address();
+
 	/*the FPGA handle*/
 	VMM_HANDLE vHandle;
+	uint64_t base;
 };
+
+template<typename T>
+inline T Memory::Read(uint64_t address)
+{
+	T buf;
+	if(scatter_handle) AddScatterReadRequest(scatter_handle, address, &buf, sizeof(T));
+	ExecuteReadScatter(scatter_handle);
+	return buf;
+}
+
+template<typename T>
+inline T Memory::Read(uint64_t address, int pid)
+{
+	auto scatter_handle_ = CreateScatterHandle(pid); //not frequently, close after create
+	T buf;
+	if(scatter_handle_) AddScatterReadRequest(scatter_handle_, address, &buf, sizeof(T));
+	ExecuteReadScatter(scatter_handle_);
+	CloseScatterHandle(scatter_handle_);
+	return buf;
+}
+
+template<typename T>
+inline T Memory::ReadArray(uint64_t address, T out[], size_t len)
+{
+	if(scatter_handle) AddScatterReadRequest(scatter_handle, address, &out, sizeof(T) * len);
+	ExecuteReadScatter(scatter_handle);
+	return out;
+}
+
+template<typename T>
+inline void Memory::Write(uint64_t address, const T& value)
+{
+	if(scatter_handle) AddScatterWriteRequest(scatter_handle, address, value, sizeof(T));
+	ExecuteWriteScatter(scatter_handle);
+}
+
+template<typename T>
+inline void Memory::WriteArray(uint64_t address, const T value[], size_t len)
+{
+	if(scatter_handle) AddScatterReadRequest(scatter_handle, address, &value, sizeof(T) * len);
+	ExecuteReadScatter(scatter_handle);
+}
 
 inline Memory mem;

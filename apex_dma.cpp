@@ -1,20 +1,28 @@
 #include "Memory/Memory.h"
+#include "offset.h"
+
+uint64_t apex_base;
 
 int main(){
     if (!mem.Init("r5apex.exe", true, false))
-	{
-		std::cout << "Failed to initilize DMA" << std::endl;
-	}
+    {
+	std::cout << "[!] Failed to open Process of APEX!" << std::endl;
+    }
+    apex_base = mem.get_base_address();
 
     c_keys keyboard;
     bool init_keyboard = keyboard.InitKeyboard();
     if (!init_keyboard)
     {
-        std::cout << "Failed to initialize keyboard hotkeys through kernel." << std::endl;
+        std::cout << "[!] Failed to initialize keyboard!" << std::endl;
     }
 
-    while(true){
-	if(keyboard.IsKeyDown(0x10)) printf("pressed shift\n");
+    while(apex_base){
+        if(!keyboard.IsKeyDown(0x10)){
+            uint64_t LocalPlayer = mem.Read<uint64_t>(apex_base + OFFSET_LOCAL_ENT);
+            int health = mem.Read<int>(LocalPlayer + OFFSET_HEALTH);
+            printf("[LocalPlayer Health] %d\n", health);
+        }else printf("[Shift pressed]\n");
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 
