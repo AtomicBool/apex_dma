@@ -34,7 +34,8 @@ the health of LocalPlayer in this project.
 
 - Add other features when I have free time
 - Windows with version <22000 will not be supported ( keyboard )\
-  because the Registry is not working well
+  because the Registry is not working well\
+  but modify winver in Memory/InputManager.cpp might work
 
 
 ## Credits
