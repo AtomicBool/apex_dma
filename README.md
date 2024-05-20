@@ -7,13 +7,13 @@ the health of LocalPlayer in this repo.\
 
 ## Tested Features
 
-- Keyboard (windows version > 22000)
-- CR3(DTB) Fix
+- Keyboard (windows version > 22000) (Tested)
+- CR3(DTB) Fix (Tested)
 - Basic Memory Functions:
-> - Scatter Read (Tested)
+> - Scatter Read / Read (Tested)
 > - Array Read (Tested)
 > - Get Base Module Address / Size (Tested)
-> - Scatter Write
+> - Scatter Write / Write (Not working)
 > - Sig Scanning
 > - Dumping MemMap
 
