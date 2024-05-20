@@ -32,6 +32,8 @@ private:
 	this->key_ptr = std::make_shared<c_keys>(*this);*/
 
 	VMMDLL_SCATTER_HANDLE scatter_handle;
+	std::mutex m;
+
 public:
 	/**
 	 * brief Constructor takes a wide string of the process.
@@ -141,7 +143,7 @@ public:
 	T Read(uint64_t address);
 
 	template<typename T>
-	T Read(uint64_t address, int pid);
+	T ReadPID(uint64_t address, int pid);
 
 	template<typename T>
 	void ReadArray(uint64_t address, T out[], size_t len);
@@ -194,6 +196,7 @@ public:
 template<typename T>
 inline T Memory::Read(uint64_t address)
 {
+	std::lock_guard<std::mutex> l(m);
 	T buf;
 	if(scatter_handle) AddScatterReadRequest(scatter_handle, address, &buf, sizeof(T));
 	ExecuteReadScatter(scatter_handle);
@@ -201,8 +204,9 @@ inline T Memory::Read(uint64_t address)
 }
 
 template<typename T>
-inline T Memory::Read(uint64_t address, int pid)
+inline T Memory::ReadPID(uint64_t address, int pid)
 {
+	std::lock_guard<std::mutex> l(m);
 	auto scatter_handle_ = CreateScatterHandle(pid); //not frequently, close after create
 	T buf;
 	if(scatter_handle_) AddScatterReadRequest(scatter_handle_, address, &buf, sizeof(T));
@@ -214,6 +218,7 @@ inline T Memory::Read(uint64_t address, int pid)
 template<typename T>
 inline void Memory::ReadArray(uint64_t address, T out[], size_t len)
 {
+	std::lock_guard<std::mutex> l(m);
 	if(scatter_handle) AddScatterReadRequest(scatter_handle, address, (T*)out, sizeof(T) * len);
 	ExecuteReadScatter(scatter_handle);
 }
@@ -221,6 +226,7 @@ inline void Memory::ReadArray(uint64_t address, T out[], size_t len)
 template<typename T>
 inline void Memory::Write(uint64_t address, T value)
 {
+	std::lock_guard<std::mutex> l(m);
 	if(scatter_handle) AddScatterWriteRequest(scatter_handle, address, &value, sizeof(T));
 	ExecuteWriteScatter(scatter_handle);
 }
@@ -228,6 +234,7 @@ inline void Memory::Write(uint64_t address, T value)
 template<typename T>
 inline void Memory::WriteArray(uint64_t address, T value[], size_t len)
 {
+	std::lock_guard<std::mutex> l(m);
 	if(scatter_handle) AddScatterReadRequest(scatter_handle, address, (T*)value, sizeof(T) * len);
 	ExecuteWriteScatter(scatter_handle);
 }
