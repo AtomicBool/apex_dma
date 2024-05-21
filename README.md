@@ -15,7 +15,6 @@ the health of LocalPlayer in this repo.\
 > - Get Base Module Address / Size (Tested)
 > - Scatter Write / Write (Not working)
 > - Sig Scanning
-> - Dumping MemMap
 
 
 ## Use
@@ -33,6 +32,8 @@ Clean:
 ```
 
 ## TODO
+
+- Fix Memory Write
 
 - Test other features when I have time
 
