@@ -3,7 +3,7 @@
 It's a DMA cheat framework for apex legends in VM.\
 Based on Memprocfs, MicroVMI plugin( for leechcore ), and Memflow QEMU Connector.\
 There's a simple example showing how to get key state and\
-the health of LocalPlayer in this repo.\
+the health of LocalPlayer in this repo.
 
 ## Tested Features
 
