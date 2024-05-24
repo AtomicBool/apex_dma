@@ -4,7 +4,7 @@
 uint64_t apex_base;
 
 int main(){
-    if (!mem.Init("r5apex.exe", true, false))
+    if (!mem.Init("r5apex.exe", true, true))
     {
 	std::cout << "[!] Failed to open Process of APEX!" << std::endl;
     }
