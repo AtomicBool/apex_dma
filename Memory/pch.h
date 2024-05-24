@@ -10,6 +10,7 @@
 #include <string.h>
 #include <thread>
 #include <vector>
+#include <mutex>
 
 #include "../includes/vmmdll.h"
 

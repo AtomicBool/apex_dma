@@ -8,6 +8,7 @@ OBJDIR=$(OUTDIR)/obj
 $(shell mkdir -p $(OBJDIR))
 $(shell cp libs/leechcore.so /usr/lib/)
 $(shell cp libs/vmm.so /usr/lib/)
+$(shell cp libs/libmicrovmi.so /usr/lib/)
 $(shell cp libs/leechcore_device_microvmi.so /usr/lib/)
 $(shell cp libs/libmemflow_qemu.x86_64.so $(OUTDIR)/)
 
@@ -33,3 +34,5 @@ clean:
 	rm -rf /usr/lib/vmm.so
 	rm -rf /usr/lib/leechcore.so
 	rm -rf /usr/lib/leechcore_device_microvmi.so
+	rm -rf /usr/lib/libmicrovmi.so
+	rm -rf ./build/libmemflow_qemu.x86_64.so

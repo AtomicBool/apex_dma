@@ -16,7 +16,7 @@ bool c_keys::InitKeyboard()
 			auto pid = pids[i];
 			uintptr_t tmp = VMMDLL_ProcessGetModuleBaseU(mem.vHandle, pid, const_cast<LPSTR>("win32ksgd.sys"));
 			uintptr_t g_session_global_slots = tmp + 0x3110;
-			uintptr_t user_session_state = mem.Read<uintptr_t>(mem.Read<uintptr_t>(mem.Read<uintptr_t>(g_session_global_slots, pid), pid), pid);
+			uintptr_t user_session_state = mem.ReadPID<uintptr_t>(mem.ReadPID<uintptr_t>(mem.ReadPID<uintptr_t>(g_session_global_slots, pid), pid), pid);
 			gafAsyncKeyStateExport = user_session_state + 0x3690;
 			if (gafAsyncKeyStateExport > 0x7FFFFFFFFFFF)
 				break;

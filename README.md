@@ -7,14 +7,13 @@ the health of LocalPlayer in this repo.
 
 ## Tested Features
 
-- Keyboard (windows version > 22000) (Tested)
-- CR3(DTB) Fix (Tested)
+- Keyboard (windows version > 22000)
+- CR3(DTB) Fix
 - Basic Memory Functions:
-> - Scatter Read / Read (Tested)
-> - Array Read (Tested)
-> - Get Base Module Address / Size (Tested)
-> - Scatter Write / Write (Not working)
-> - Sig Scanning
+> - Scatter Read / Read
+> - Array Read
+> - Get Base Module Address / Size
+> - Scatter Write / Write
 
 
 ## Use
@@ -32,10 +31,7 @@ Clean:
 ```
 
 ## TODO
-
-- Fix Memory Write
-
-- Test other features when I have time
+Nothing.
 
 - Windows with version <22000 will not be supported ( keyboard )\
   because the Registry is not working well\
