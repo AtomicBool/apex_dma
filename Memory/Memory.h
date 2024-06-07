@@ -190,7 +190,7 @@ public:
 
 	/*the FPGA handle*/
 	VMM_HANDLE vHandle;
-	uint64_t base; //only used in CR3Fix
+	uint64_t base; //addr of r5apex.exe, only used in CR3Fix
 };
 
 template<typename T>
