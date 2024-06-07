@@ -190,7 +190,7 @@ public:
 
 	/*the FPGA handle*/
 	VMM_HANDLE vHandle;
-	uint64_t base;
+	uint64_t base; //only used in CR3Fix
 };
 
 template<typename T>
