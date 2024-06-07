@@ -584,5 +584,5 @@ void Memory::ExecuteWriteScatter(VMMDLL_SCATTER_HANDLE handle, int pid)
 }
 
 uint64_t Memory::get_base_address(){
-	return base;
+	return current_process.base_address;
 }
