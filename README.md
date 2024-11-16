@@ -1,14 +1,13 @@
+# nolonger update
 
 # APEX DMA
-It's a DMA cheat framework for apex legends in VM.\
 Based on Memprocfs, MicroVMI plugin( for leechcore ), and Memflow QEMU Connector.\
 There's a simple example showing how to get key state and\
-the health of LocalPlayer in this repo.
+CR3 won't work now
 
-## Tested Features
+## Tested Features (July 2024)
 
-- Keyboard (windows version > 22000)
-- CR3(DTB) Fix
+- Keyboard (windows version > 22000) 
 - Basic Memory Functions:
 > - Scatter Read / Read
 > - Array Read
@@ -30,8 +29,7 @@ Clean:
   sudo make clean
 ```
 
-## TODO
-Nothing.
+## Keybaord
 
 - Windows with version <22000 will not be supported ( keyboard )\
   because the Registry is not working well\
